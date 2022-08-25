@@ -1,0 +1,67 @@
+<html>
+  <script src="https://unpkg.com/vue@3"></script>
+  <style>
+    input {
+      margin: 0.5rem;
+      display: block;
+    }
+  </style>
+  <body>
+    <div id="app">
+      <login-form />
+    </div>
+    <script>
+      let app = Vue.createApp({
+        data: function () {
+          return {};
+        },
+        methods: {},
+      });
+      app.component("login-form", {
+        template: `
+          <form @submit="onSubmit">
+            <h1>{{title}}</h1>
+            <custom-input :label="email_title" v-model="email"/>
+            <custom-input :label="password_title" v-model="password"/>
+            <button >Login</button>
+          </form>
+        `,
+        components: ["custom-input"],
+        data() {
+          return {
+            title: "Login Form",
+            email_title: "Email",
+            password_title: "Password",
+            email: "",
+            password: "",
+          };
+        },
+        methods: {
+          onSubmit() {
+            console.log(this.email, this.password);
+          },
+        },
+      });
+      app.component("custom-input", {
+        template: `
+          <label>
+            {{ label }}
+            <input v-model="inputValue"/>
+          </label>
+        `,
+        props: ["label", "modelValue", "email", "type", "password"],
+        computed: {
+          inputValue: {
+            get() {
+              return this.modelValue;
+            },
+            set(value) {
+              this.$emit("update:modelValue", value);
+            },
+          },
+        },
+      });
+      app.mount("#app");
+    </script>
+  </body>
+</html>
